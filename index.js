@@ -5,7 +5,9 @@ const robots = {
 }
 
 async function start(){
-	const content = {}
+	const content = {
+		maximumSentences: 10
+	}
 
 	content.searchTerm = askAndReturnSearchTerm()
 	content.prefix = askAndReturnPrefix()
@@ -13,17 +15,16 @@ async function start(){
 	await robots.text(content)
 
 	function askAndReturnSearchTerm(){
-		return readline.question("Type a wikipedia search term: ")
+		return readline.question("Escreva um termo de pesquisa do Wikipedia: ")
 	}
 
 	function askAndReturnPrefix(){
-		const prefixes = ['Who is','What is','The history of']
-		const selectedPrefixIndex = readline.keyInSelect(prefixes, 'Choose one option:')
+		const prefixes = ['Quem é','O que é','A história de']
+		const selectedPrefixIndex = readline.keyInSelect(prefixes, 'Escolha uma opção:')
 		const selectedPrefixText = prefixes[selectedPrefixIndex]
 		return selectedPrefixText
 	}
-
-	console.log(content)
+	console.log(content.sentences)
 }
 
 start();
