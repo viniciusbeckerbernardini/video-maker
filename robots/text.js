@@ -57,6 +57,7 @@ async function robot(content){
 			content.sentences.push({
 				text:sentence,
 				keywords:[],
+				categories:[],
 				images:[]
 			})
 		})
@@ -69,6 +70,7 @@ async function robot(content){
 	async function fetchKeywordsOfAllSentences(content){
 		for (const sentence of content.sentences) {
 			sentence.keywords = await fetchWatsonAndReturnKeywords(sentence.text)
+			sentence.categories = await fetchWastonAndReturnCategories(sentence.text)
 		}
 	}
 
@@ -77,7 +79,7 @@ async function robot(content){
 			nlu.analyze({
 				text: sentence,
 				features: {
-					keywords: {}
+					keywords: {},
 				}
 			}, (error,response)=>{
 				if(error){
@@ -87,6 +89,22 @@ async function robot(content){
 					return keyword.text
 				})
 				resolve(keywords)
+			})
+		})
+	}
+
+	async function fetchWastonAndReturnCategories(sentence){
+		return new Promise((resolve,reject) =>{
+			nlu.analyze({
+				text:sentence,
+				features:{
+					categories: {}	
+				}
+			}, (error,response) => {
+				const categories = response.categories.map((category) => {
+					return category.label;
+				})
+				resolve(categories);
 			})
 		})
 	}
